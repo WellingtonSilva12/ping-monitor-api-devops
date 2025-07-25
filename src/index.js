@@ -8,6 +8,22 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3838;
 
+const client = require('prom-client');
+const collectDefaultMetrics = client.collectDefaultMetrics;
+
+collectDefaultMetrics();
+
+const pingCounter = new client.Counter({
+  name: 'ping_requests_total',
+  help: 'Número total de pings realizados'
+});
+
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', client.register.contentType);
+  res.end(await client.register.metrics());
+});
+
+
 app.use(cors());
 app.use(morgan('combined'));
 
