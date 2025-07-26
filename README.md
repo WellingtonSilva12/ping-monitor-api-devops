@@ -1,19 +1,18 @@
-# Ping Monitor: Full Stack de Monitoramento com DevOps
+# 🔍 Ping Monitor – Full Stack de Monitoramento com DevOps
 
-
-Um projeto completo de monitoramento de serviços que utiliza um stack moderno de DevOps para coletar, armazenar e visualizar métricas de latência e disponibilidade. Desenvolvido como um projeto prático para aplicar conceitos de Docker, CI/CD, Prometheus e Grafana.
-
----
-
-##  Sobre o projeto
-
-Este projeto simula um ambiente de monitoramento real, onde uma API customizada em Node.js verifica o status de uma lista de hosts via ping (ICMP). As métricas de latência e status (online/offline) são expostas em um endpoint `/metrics` e coletadas pelo Prometheus. O Grafana, por sua vez, consome esses dados para gerar dashboards visuais e intuitivos.
-
-Todo o ambiente é orquestrado com Docker Compose e um pipeline de CI/CD com GitHub Actions automatiza o build e a publicação das imagens Docker no Docker Hub.
+Projeto completo de monitoramento de hosts via ping com stack DevOps moderno, incluindo Node.js, Docker, Prometheus, Grafana e CI/CD com GitHub Actions. Ideal como aplicação prática de conceitos de observabilidade e automação com infraestrutura como código.
 
 ---
 
-## stack de tecnologias
+## 📌 Visão Geral
+
+O Ping Monitor simula um ambiente real de monitoramento de disponibilidade e latência de serviços. A API customizada realiza verificações ICMP (ping) a uma lista de hosts, expondo os dados em /metrics para coleta pelo Prometheus. Em seguida, o Grafana transforma essas métricas em dashboards visuais e interativos.
+
+Todo o sistema é orquestrado com Docker Compose, e o pipeline CI/CD com GitHub Actions cuida do build e publicação das imagens Docker no Docker Hub.
+
+---
+
+## 🧰 Stack Tecnológica
 
 * **Backend (API):** Node.js, Express.js, `prom-client`
 * **Frontend:** HTML5, CSS3, JavaScript (servido via NGINX)
@@ -25,30 +24,33 @@ Todo o ambiente é orquestrado com Docker Compose e um pipeline de CI/CD com Git
 
 ---
 
-## 🚀 Funcionalidades
+## ✅ Funcionalidades
 
-* **Monitoramento em Tempo Real:** Verifica o status e a latência de múltiplos hosts.
-* **Métricas Customizadas:** A API expõe as métricas `ping_status_up` e `ping_latency_seconds`.
-* **Dashboards Visuais:** Painéis no Grafana para uma análise clara e rápida dos dados.
-* **Ambiente 100% Containerizado:** Todos os serviços (API, Frontend, Prometheus, Grafana) rodam em contêineres Docker isolados.
-* **Pipeline de CI/CD Automatizado:** A cada `push` em branches específicas, as imagens Docker são automaticamente construídas e publicadas no Docker Hub.
+* **🔎 Monitoramento em Tempo Real:** Verifica o status e a latência de múltiplos hosts.
+* **📊 Exposição de Métricas Customizadas:** A API expõe as métricas `ping_status_up` e `ping_latency_seconds`.
+* **🖥️ Dashboards com Grafana:** Painéis no Grafana para uma análise clara e rápida dos dados.
+* **📦 Ambiente Containerizado:** Todos os serviços (API, Frontend, Prometheus, Grafana) rodam em contêineres Docker isolados.
+* **🤖 CI/CD Automatizado:** Build e push das imagens Docker a cada ``push`` para branches configuradas.
 
 ---
 
 ## ⚙️ Como Executar Localmente
 
-### Pré-requisitos
+### ✅ Pré-requisitos
 
 * [Git](https://git-scm.com/)
 * [Docker](https://www.docker.com/products/docker-desktop/)
 * [Docker Compose](https://docs.docker.com/compose/)
 
-### Passos para Instalação
+### 🚀 Passos de Execução
 
-1.  **Clone o repositório:**
+1. **Clone o repositório:**
+
     ```bash
-    git clone https://github.com/WellingtonSilva12/ping-monitor-api-devops.git
-    cd SEU-REPOSITORIO
+
+    git clone <https://github.com/WellingtonSilva12/ping-monitor-api-devops.git>
+    cd ping-monitor-api-devops
+
     ```
 
 2.  **Configure os hosts a serem monitorados:**
@@ -60,15 +62,17 @@ Todo o ambiente é orquestrado com Docker Compose e um pipeline de CI/CD com Git
     ]
     ```
 
-3.  **Configure as variáveis de ambiente:**
+3. **Variáveis de Ambiente (opcional):**
     No arquivo `docker-compose.yml`, substitua `SEU_USUARIO_DOCKERHUB` pelo seu nome de usuário real ou, como boa prática, crie um arquivo `.env` na raiz do projeto:
-    
+
     **Arquivo `.env`:**
+
     ```
     DOCKERHUB_USERNAME=seu-usuario-dockerhub
     ```
 
     **E ajuste o `docker-compose.yml` para usar a variável:**
+
     ```yaml
     # ...
     services:
@@ -80,36 +84,39 @@ Todo o ambiente é orquestrado com Docker Compose e um pipeline de CI/CD com Git
     # ...
     ```
 
-4.  **Inicie a aplicação:**
+4. **Inicie a aplicação:**
     Use o Docker Compose para baixar as imagens do Docker Hub e iniciar todos os contêineres.
+
     ```bash
     docker-compose up -d
     ```
 
-5.  **Acesse os serviços:**
-    * **Frontend:** [http://localhost](http://localhost)
+5. **Acesse os serviços:**
+    * **Api:** [http://localhost:3838/hosts](http://localhost:3838/hosts)
+    * **Frontend:** [http://localhost:8089](http://localhost:8089)
     * **Grafana:** [http://localhost:3000](http://localhost:3000) (login: `admin`/`admin`)
     * **Prometheus:** [http://localhost:9090](http://localhost:9090)
 
 ---
 
-##  CI/CD
+## 🔁 CI/CD com GitHub Actions
 
 Este projeto utiliza GitHub Actions para automação de build e publicação de imagens. O workflow está definido em `.github/workflows/build-and-push.yml`.
 
 O desenvolvimento da pipeline foi realizado na branch `ci-cd-docker`. O gatilho (`on:`) do workflow foi configurado para rodar automaticamente em cada `push` para branches específicas, como `main` e `ci-cd-docker`. Isso permite testar o pipeline na branch de desenvolvimento antes de integrar à branch principal.
 
 Um exemplo de configuração de gatilho no workflow seria:
+
 ```yaml
 on:
   push:
     branches: [ "main", "ci-cd-docker" ] # Roda em pushes para a branch principal e para a de desenvolvimento
   pull_request:
-    branches: [ "main" ] # Roda também para validar Pull Requests enviados para a main
+    branches: [ "main" ] # Roda também para validar Pull Reque/sts enviados para a main
 ```
-A cada execução, o pipeline realiza as seguintes tarefas:
 
- - Faz login seguro no Docker Hub usando os Secrets do repositório.
-- Constrói as imagens Docker para a API e para o Frontend.
-- Publica as novas imagens com a tag :latest no Docker Hub.
+### ⚙️ Etapas do Pipeline:
 
+* Faz login seguro no Docker Hub usando os Secrets do repositório.
+* Constrói as imagens Docker para a API e para o Frontend.
+* Publica as novas imagens com a tag :latest no Docker Hub.
