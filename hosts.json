@@ -1,4 +1,17 @@
 [
+  { "networkName": "VM Ubuntu Server", "host": "192.168.1.6" },
   { "networkName": "Google DNS", "host": "8.8.8.8" },
-  { "networkName": "Cloudflare", "host": "1.1.1.1" }
+  { "networkName": "Cloudflare Website", "host": "cloudflare.com" },
+  { "networkName": "Google Website", "host": "google.com" },
+  { "networkName": "YouTube", "host": "youtube.com" },
+  { "networkName": "GitHub", "host": "github.com" },
+  { "networkName": "Wikipedia", "host": "wikipedia.org" },
+  { "networkName": "Amazon AWS", "host": "aws.amazon.com" },
+  { "networkName": "Microsoft", "host": "microsoft.com" },
+  { "networkName": "Netflix", "host": "netflix.com" },
+  { "networkName": "Facebook", "host": "facebook.com" },
+  { "networkName": "Twitter", "host": "twitter.com" },
+  { "networkName": "LinkedIn", "host": "linkedin.com" },
+  { "networkName": "Apple", "host": "apple.com" },
+  { "networkName": "Red Hat", "host": "redhat.com" }
 ]
