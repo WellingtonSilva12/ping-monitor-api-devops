@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Monitor</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 40px;
+        }
+
+        #hosts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .host-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 5px solid #444;
+            transition: all 0.3s ease;
+        }
+
+        .host-card h2 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .host-card p {
+            margin: 5px 0;
+            color: #b0b0b0;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0; 
+        }
+
+        .online {
+            background-color: #28a745; 
+            box-shadow: 0 0 8px #28a745;
+        }
+
+        .offline {
+            background-color: #dc3545; 
+            box-shadow: 0 0 8px #dc3545;
+        }
+        
+        .host-card.online-border {
+            border-left-color: #28a745;
+        }
+
+        .host-card.offline-border {
+            border-left-color: #dc3545;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>📡 Ping Monitor</h1>
+    <div id="hosts-container">
+        </div>
+
+    <script>
+        const API_URL = 'http://localhost:3838/hosts';
+        const container = document.getElementById('hosts-container');
+
+        async function fetchAndDisplayHosts() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`Erro na rede: ${response.statusText}`);
+                }
+                const hosts = await response.json();
+
+                container.innerHTML = ''; 
+
+                hosts.forEach(host => {
+                    const card = document.createElement('div');
+                    card.className = 'host-card';
+
+                    card.classList.add(host.alive ? 'online-border' : 'offline-border');
+
+                    const statusClass = host.alive ? 'online' : 'offline';
+                    const latency = host.alive ? `${host.time} ms` : 'N/A';
+                    const statusText = host.alive ? 'Online' : 'Offline';
+
+                    card.innerHTML = `
+                        <h2>
+                            <span class="status-indicator ${statusClass}"></span>
+                            ${host.networkName}
+                        </h2>
+                        <p><strong>IP:</strong> ${host.host}</p>
+                        <p><strong>Status:</strong> ${statusText}</p>
+                        <p><strong>Latência:</strong> ${latency}</p>
+                    `;
+
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                container.innerHTML = `<p style="text-align: center; color: #ff6b6b;">Falha ao carregar os dados. Verifique se a API está rodando. (${error.message})</p>`;
+                console.error('Erro:', error);
+            }
+        }
+
+        fetchAndDisplayHosts();
+        setInterval(fetchAndDisplayHosts, 5000); 
+    </script>
+
+</body>
+</html>
