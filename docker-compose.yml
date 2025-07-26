@@ -1,6 +1,6 @@
 services:
   frontend:
-    build: ./src               
+    image: nwellbr/ping-frontend:latest               
     container_name: ping-frontend
     ports:
       - "8089:80"                
@@ -8,7 +8,7 @@ services:
       - api
 
   api:
-    build: .                   
+    image: nwellbr/ping-api:latest                      
     container_name: ping-api
     ports:
       - "3838:3838"
