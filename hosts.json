@@ -1,4 +1,4 @@
 [
-  { "networkName": "Google DNS", "host": "8.8.5.8" },
+  { "networkName": "Google DNS", "host": "8.8.8.8" },
   { "networkName": "Cloudflare", "host": "1.1.1.1" }
 ]
