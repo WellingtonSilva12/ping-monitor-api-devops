@@ -1,6 +1,14 @@
 services:
+  frontend:
+    build: ./src               
+    container_name: ping-frontend
+    ports:
+      - "8089:80"                
+    depends_on:
+      - api
+
   api:
-    build: .
+    build: .                   
     container_name: ping-api
     ports:
       - "3838:3838"
