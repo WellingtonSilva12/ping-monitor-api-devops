@@ -1,7 +1,8 @@
+# docker/prometheus/prometheus.yml
 global:
   scrape_interval: 10s
+
 scrape_configs:
   - job_name: 'ping-api'
-    metrics_path: /metrics
     static_configs:
       - targets: ['api:3838']

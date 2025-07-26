@@ -8,20 +8,30 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3838;
 
+// --- Configuração do Prometheus ---
 const client = require('prom-client');
 const collectDefaultMetrics = client.collectDefaultMetrics;
-
 collectDefaultMetrics();
 
-const pingCounter = new client.Counter({
-  name: 'ping_requests_total',
-  help: 'Número total de pings realizados'
+// Novas métricas com labels
+const pingLatency = new client.Gauge({
+  name: 'ping_latency_seconds',
+  help: 'Latência do ping em segundos para um host específico',
+  labelNames: ['host', 'networkName']
 });
 
+const pingStatus = new client.Gauge({
+  name: 'ping_status_up',
+  help: 'Status do host (1 para online, 0 para offline)',
+  labelNames: ['host', 'networkName']
+});
+
+// Endpoint de Métricas
 app.get('/metrics', async (req, res) => {
   res.set('Content-Type', client.register.contentType);
   res.end(await client.register.metrics());
 });
+// --- Fim da Configuração do Prometheus ---
 
 
 app.use(cors());
@@ -38,6 +48,7 @@ const loadHosts = () => {
 
 const pingHost = async (host) => {
   try {
+    // Usamos um timeout para evitar que a aplicação fique presa
     return await ping.promise.probe(host, { timeout: 5 });
   } catch (err) {
     console.error(`Erro ao pingar o host ${host}:`, err.message);
@@ -51,6 +62,12 @@ app.get('/hosts', async (req, res, next) => {
     const results = await Promise.all(
       hosts.map(async (host) => {
         const pingResult = await pingHost(host.host);
+        const labels = { host: host.host, networkName: host.networkName };
+
+        // Atualiza as métricas do Prometheus
+        pingLatency.set(labels, pingResult.time !== null ? pingResult.time / 1000 : 0);
+        pingStatus.set(labels, pingResult.alive ? 1 : 0);
+
         return {
           networkName: host.networkName,
           host: host.host,
@@ -60,21 +77,6 @@ app.get('/hosts', async (req, res, next) => {
       })
     );
     res.json(results);
-    console.log(results);
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.get('/ping/:host', async (req, res, next) => {
-  try {
-    const host = req.params.host;
-    const result = await pingHost(host);
-    res.json({
-      host: host,
-      alive: result.alive,
-      time: result.time,
-    });
   } catch (err) {
     next(err);
   }
