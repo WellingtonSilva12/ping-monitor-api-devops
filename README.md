@@ -2,6 +2,8 @@
 
 Projeto completo de monitoramento de hosts via ping com stack DevOps moderno, incluindo Node.js, Docker, Prometheus, Grafana e CI/CD com GitHub Actions. Ideal como aplicação prática de conceitos de observabilidade e automação com infraestrutura como código.
 
+![Frontend da API](https://github.com/WellingtonSilva12/ping-monitor-api-devops/blob/main/src/frontend.jfif "Frontend da API")
+
 ---
 
 ## 📌 Visão Geral
@@ -31,6 +33,9 @@ Todo o sistema é orquestrado com Docker Compose, e o pipeline CI/CD com GitHub 
 * **🖥️ Dashboards com Grafana:** Painéis no Grafana para uma análise clara e rápida dos dados.
 * **📦 Ambiente Containerizado:** Todos os serviços (API, Frontend, Prometheus, Grafana) rodam em contêineres Docker isolados.
 * **🤖 CI/CD Automatizado:** Build e push das imagens Docker a cada ``push`` para branches configuradas.
+
+![Grafana com dados da API](https://github.com/WellingtonSilva12/ping-monitor-api-devops/blob/main/src/grafana.jfif "Grafana com dados da API")
+
 
 ---
 
